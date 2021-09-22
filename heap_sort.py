@@ -18,7 +18,7 @@ def heapify(array, current_index, heap_size, sort_order):
         else:
             return -1
 
-    if left_child < heap_size and compare(array[left_child], array[current_index]) != compare(sort_order, "desc"):
+    if left_child < heap_size and compare(array[left_child], array[largest_element]) != compare(sort_order, "desc"):
         largest_element = left_child
     compare_count += 4
 
@@ -30,7 +30,7 @@ def heapify(array, current_index, heap_size, sort_order):
         array[current_index], array[largest_element] = array[largest_element], array[current_index]
         compare_count += 1
         swap_count += 1
-        heapify(array, current_index, heap_size, sort_order)
+        heapify(array, largest_element, heap_size, sort_order)
 
 
 def heap_sort(array, sort_order):
@@ -48,10 +48,7 @@ def heap_sort(array, sort_order):
     return array
 
 
-def main():
-    global swap_count
-    global compare_count
-
+if __name__ == "__main__":
     sort_order = str(input("Enter sort order (asc or desc): "))
     array = [int(item) for item in input("Enter initial array: ").split(",")]
 

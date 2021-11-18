@@ -9,44 +9,50 @@ class Edge:
 
 
 class Graph:
-    def __init__(self, nodes_number, edge_list : List[Edge]):
+    def __init__(self, nodes_number, edge_list: List[Edge]):
         self.nodes_number = nodes_number
         self.edge_list = edge_list
-        self.parent = []
-        self.rank = []
         self.mst = []
 
-    def find_parent(self, node):
-        if node == self.parent[node]:
+    def find_parent(self, parent, node):
+        if node == parent[node]:
             return node
-        return self.find_parent(self.parent[node])
+        return self.find_parent(parent, parent[node])
+
+    def union_sets(self, parent, rank, first_set, second_set):
+        first_set_root = self.find_parent(parent, first_set)
+        second_set_root = self.find_parent(parent, second_set)
+        if rank[first_set_root] < rank[second_set_root]:
+            parent[first_set_root] = second_set_root
+        elif rank[first_set_root] > rank[second_set_root]:
+            parent[second_set_root] = first_set_root
+        else:
+            parent[second_set_root] = first_set_root
+            rank[first_set_root] += 1
 
     def kruskal_mst(self):
-        self.edge_list.sort(key=lambda Edge : Edge.weight)
-        self.parent = [None] * self.nodes_number
-        self.rank = [None] * self.nodes_number
+        mst_index, sorted_edges_index = 0, 0
+        parent = []
+        rank = []
 
+        self.edge_list = sorted(self.edge_list, key=lambda Edge: Edge.weight)
         for node in range(self.nodes_number):
-            self.parent[node] = node
-            self.rank[node] = 0
+            parent.append(node)
+            rank.append(0)
 
-        for edge in self.edge_list:
-            root1 = self.find_parent(edge.start_vertex)
-            root2 = self.find_parent(edge.end_vertex)
-            if root1 != root2:
+        while mst_index < self.nodes_number - 1:
+            start_vertex = self.edge_list[sorted_edges_index].start_vertex
+            end_vertex = self.edge_list[sorted_edges_index].end_vertex
+            weight = self.edge_list[sorted_edges_index].weight
+            sorted_edges_index += 1
+            edge = Edge(start_vertex, end_vertex, weight)
+            start = self.find_parent(parent, start_vertex)
+            end = self.find_parent(parent, end_vertex)
+            if start != end:
+                mst_index += 1
                 self.mst.append(edge)
-                if self.rank[root1] < self.rank[root2]:
-                    self.parent[root1] = root2
-                    self.rank[root2] += 1
-                else:
-                    self.parent[root2] = root1
-                    self.rank[root1] += 1
-        print("\nEdges of minimum spanning tree in graph :", end=' ')
-        cost = 0
-        for edge in self.mst:
-            print("[" + str(edge.start_vertex) + "-" + str(edge.end_vertex) + "](" + str(edge.weight) + ")", end=' ')
-            cost += edge.weight
-        print("\nCost of minimum spanning tree : " + str(cost))
+                self.union_sets(parent, rank, start, end)
+        return self.mst
 
 
 if __name__ == '__main__':
@@ -62,22 +68,12 @@ if __name__ == '__main__':
     e9 = Edge(3, 4, 1)
     e10 = Edge(4, 5, 3)
 
-    graph1 = Graph(nodes_number, [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10])
-    graph1.kruskal_mst()
+    graph = Graph(nodes_number, [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10])
+    graph.kruskal_mst()
 
-    num_nodes = 7
-    a = Edge(0, 1, 1)
-    b = Edge(0, 2, 2)
-    c = Edge(0, 3, 1)
-    d = Edge(0, 4, 1)
-    e = Edge(0, 5, 2)
-    f = Edge(0, 6, 1)
-    g = Edge(1, 2, 2)
-    h = Edge(1, 6, 2)
-    i = Edge(2, 3, 1)
-    j = Edge(3, 4, 2)
-    k = Edge(4, 5, 2)
-    l = Edge(5, 6, 1)
-
-    graph2 = Graph(num_nodes, [a, b, c, d, e, f, g, h, i, j, k, l])
-    graph2.kruskal_mst()
+    print("\nEdges of minimum spanning tree in graph :", end=' ')
+    cost = 0
+    for edge in graph.mst:
+        print("[" + str(edge.start_vertex) + "-" + str(edge.end_vertex) + "](" + str(edge.weight) + ")", end=' ')
+        cost += edge.weight
+    print("\nCost of minimum spanning tree : " + str(cost))

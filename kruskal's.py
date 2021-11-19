@@ -9,66 +9,65 @@ class Edge:
 
 
 class Graph:
-    def __init__(self, nodes_number, edge_list: List[Edge]):
+    def __init__(self, nodes_number):
         self.nodes_number = nodes_number
-        self.edge_list = edge_list
+        self.edge_list = List[Edge]
         self.mst = []
+        self.rank = 0
+        self.parent = self
 
-    def find_parent(self, parent, node):
-        if node == parent[node]:
-            return node
-        return self.find_parent(parent, parent[node])
+    def add(self, listkk: list[Edge]):
+        self.edge_list = listkk
 
-    def union_sets(self, parent, rank, first_set, second_set):
-        first_set_root = self.find_parent(parent, first_set)
-        second_set_root = self.find_parent(parent, second_set)
-        if rank[first_set_root] < rank[second_set_root]:
-            parent[first_set_root] = second_set_root
-        elif rank[first_set_root] > rank[second_set_root]:
-            parent[second_set_root] = first_set_root
+    def find_root(self):
+        if self.parent is not self:
+            self.parent = self.parent.find_root()
+        return self.parent
+
+    def union_sets(self, other):
+        first_set_root = self.find_root()
+        second_set_root = other.find_root()
+        if first_set_root is second_set_root:
+            return
+        if first_set_root.rank < second_set_root.rank:
+            first_set_root.parent = second_set_root
+        elif first_set_root.rank > second_set_root.rank:
+            second_set_root.parent = first_set_root
         else:
-            parent[second_set_root] = first_set_root
-            rank[first_set_root] += 1
+            second_set_root.parent = first_set_root
+            first_set_root.rank += 1
 
     def kruskal_mst(self):
-        mst_index, sorted_edges_index = 0, 0
-        parent = []
-        rank = []
+        nodes_not_unique = []
+        for edge in sorted(self.edge_list, key=lambda Edge: Edge.weight):
+            nodes_not_unique.append(edge.start_vertex)
+            nodes_not_unique.append(edge.end_vertex)
 
-        self.edge_list = sorted(self.edge_list, key=lambda Edge: Edge.weight)
-        for node in range(self.nodes_number):
-            parent.append(node)
-            rank.append(0)
+        nodes = list(set(nodes_not_unique))
 
-        while mst_index < self.nodes_number - 1:
-            start_vertex = self.edge_list[sorted_edges_index].start_vertex
-            end_vertex = self.edge_list[sorted_edges_index].end_vertex
-            weight = self.edge_list[sorted_edges_index].weight
-            sorted_edges_index += 1
-            edge = Edge(start_vertex, end_vertex, weight)
-            start = self.find_parent(parent, start_vertex)
-            end = self.find_parent(parent, end_vertex)
-            if start != end:
-                mst_index += 1
+        result = dict((node, Graph(node)) for node in nodes)
+        print(result)
+        for edge in sorted(self.edge_list, key=lambda Edge: Edge.weight):
+
+            start = result[edge.start_vertex].find_root()
+            end = result[edge.end_vertex].find_root()
+
+            if start is not end:
                 self.mst.append(edge)
-                self.union_sets(parent, rank, start, end)
-        return self.mst
+                start.union_sets(end)
 
 
 if __name__ == '__main__':
-    nodes_number = 6
-    e1 = Edge(0, 1, 4)
-    e2 = Edge(0, 2, 1)
-    e3 = Edge(0, 3, 5)
-    e4 = Edge(1, 3, 2)
-    e5 = Edge(1, 4, 3)
-    e6 = Edge(1, 5, 3)
-    e7 = Edge(2, 3, 2)
-    e8 = Edge(2, 4, 8)
-    e9 = Edge(3, 4, 1)
-    e10 = Edge(4, 5, 3)
+    nodes_number = 7
+    e1 = Edge(1, 2, 7)
+    e2 = Edge(1, 4, 5)
+    e3 = Edge(3, 5, 5)
+    e4 = Edge(2, 5, 7)
+    e5 = Edge(5, 7, 9)
+    e6 = Edge(4, 6, 6)
 
-    graph = Graph(nodes_number, [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10])
+    graph = Graph(nodes_number)
+    graph.add([e1, e2, e3, e4, e5, e6])
     graph.kruskal_mst()
 
     print("\nEdges of minimum spanning tree in graph :", end=' ')

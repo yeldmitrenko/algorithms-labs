@@ -1,1 +1,2 @@
-# Lab 5
+Rabin Karp String Matching Algorithm
+

@@ -1,33 +1,25 @@
 import unittest
 
-from lab6.ijones import find_ways_count
+from lab7.rabin_karp import rabin_karp_search
 
 
-class FindWaysCountTest(unittest.TestCase):
+class RabinKarpTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.matrix1 = [
-            ["a", "a", "a"],
-            ["c", "a", "b"],
-            ["d", "e", "f"]
-        ]
-        self.matrix2 = [['a', 'b', 'c', 'd', 'e', 'f', 'a', 'g', 'h', 'i']]
-        self.matrix3 = [
-            ["a", "a", "a", "a", "a", "a", "a"],
-            ["a", "a", "a", "a", "a", "a", "a"],
-            ["a", "a", "a", "a", "a", "a", "a"],
-            ["a", "a", "a", "a", "a", "a", "a"],
-            ["a", "a", "a", "a", "a", "a", "a"],
-            ["a", "a", "a", "a", "a", "a", "a"]
-        ]
+        self.test_text1 = "AAA NN MM LL K AA"
+        self.test_pattern1 = "AA"
+        self.benchmark_positions_array1 = [0, 1, 15]
 
-    def test_first_case(self):
-        self.assertEqual(find_ways_count(self.matrix1, 3, 3), 5)
+        self.test_pattern2 = "LLN"
+        self.test_text2 = "BBCLLNMNLLN"
+        self.benchmark_positions_array2 = [3, 8]
 
-    def test_second_case(self):
-        self.assertEqual(find_ways_count(self.matrix2, 10, 1), 4)
+    def test_rabin_karp_search_1(self):
+        pattern_positions = rabin_karp_search(self.test_text1, self.test_pattern1)
+        self.assertEqual(pattern_positions, self.benchmark_positions_array1)
 
-    def test_third_case(self):
-        self.assertEqual(find_ways_count(self.matrix3, 7, 6), 201684)
+    def test_rabin_karp_search_2(self):
+        pattern_positions = rabin_karp_search(self.test_text2, self.test_pattern2)
+        self.assertEqual(pattern_positions, self.benchmark_positions_array2)
 
 
 if __name__ == '__main__':

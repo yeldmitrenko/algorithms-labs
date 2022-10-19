@@ -1,5 +1,5 @@
-# Lab-2
+# Lab 2 - HashTable
 
-## Task - implement a HashTable
+Task - implement a HashTable
 
-### Code must be covered with tests
+Code must be covered with tests

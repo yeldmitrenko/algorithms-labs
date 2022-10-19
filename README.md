@@ -1,4 +1,4 @@
-# Lab-6
+# Lab 6 - Dynamic Programming
 
 ## Task
 In search of the Holy Grail, Indiana Jones faced a dangerous trial.
@@ -12,15 +12,15 @@ top and bottom plates. (a and f in the example above)
 
 There are 3 rules for Indiana to move:
 
-1.After each step, Indiana must be more right than he was before.
+1. After each step, Indiana must be more right than he was before.
  
 ![](readme_images/moving_rule_1.png)
 
-2.You can always move to one plate on the right.
+2. You can always move to one plate on the right.
 
 ![](readme_images/moving_rule_2.png)
 
-3.In addition to moving to one plate to the right, you can jump to any plate
+3. In addition to moving to one plate to the right, you can jump to any plate
 with the same letter if it's on the right. For example, you can jump from the letter a 
 to any other the letter a, provided that it's on the right. 
 

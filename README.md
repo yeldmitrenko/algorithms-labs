@@ -1,4 +1,4 @@
-# Lab-1 
+# Lab 1 - HeapSort
 
 ## Task
 Implement a sorting algorithm - HeapSort(ascending/descending)

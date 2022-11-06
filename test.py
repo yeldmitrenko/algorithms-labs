@@ -1,28 +1,34 @@
 import unittest
-from heap_sort import heap_sort
-from copy import deepcopy
+
+from lab6.ijones import find_ways_count
 
 
-class TestHeapSort(unittest.TestCase):
+class FindWaysCountTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.array_example = [1, 2, 56, 45, -9, 78, 11]
-        self.array_sorted_asc = [-9, 1, 2, 11, 45, 56, 78]
-        self.array_sorted_desc = [78, 56, 45, 11, 2, 1, -9]
+        self.matrix1 = [
+            ["a", "a", "a"],
+            ["c", "a", "b"],
+            ["d", "e", "f"]
+        ]
+        self.matrix2 = [['a', 'b', 'c', 'd', 'e', 'f', 'a', 'g', 'h', 'i']]
+        self.matrix3 = [
+            ["a", "a", "a", "a", "a", "a", "a"],
+            ["a", "a", "a", "a", "a", "a", "a"],
+            ["a", "a", "a", "a", "a", "a", "a"],
+            ["a", "a", "a", "a", "a", "a", "a"],
+            ["a", "a", "a", "a", "a", "a", "a"],
+            ["a", "a", "a", "a", "a", "a", "a"]
+        ]
 
-    def test_sort_asc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_example), "asc"), self.array_sorted_asc)
+    def test_first_case(self):
+        self.assertEqual(find_ways_count(self.matrix1, 3, 3), 5)
 
-    def test_sort_desc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_example), "desc"), self.array_sorted_desc)
+    def test_second_case(self):
+        self.assertEqual(find_ways_count(self.matrix2, 10, 1), 4)
 
-    def test_sort_asc_in_asc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_asc), "asc"), self.array_sorted_asc)
+    def test_third_case(self):
+        self.assertEqual(find_ways_count(self.matrix3, 7, 6), 201684)
 
-    def test_sort_asc_in_desc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_asc), "desc"), self.array_sorted_desc)
 
-    def test_sort_desc_in_asc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_desc), "asc"), self.array_sorted_asc)
-
-    def test_sort_desc_in_desc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_desc), "desc"), self.array_sorted_desc)
+if __name__ == '__main__':
+    unittest.main()

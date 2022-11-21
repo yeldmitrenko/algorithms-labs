@@ -1,28 +1,26 @@
 import unittest
-from heap_sort import heap_sort
-from copy import deepcopy
+
+from lab7.rabin_karp import rabin_karp_search
 
 
-class TestHeapSort(unittest.TestCase):
+class RabinKarpTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.array_example = [1, 2, 56, 45, -9, 78, 11]
-        self.array_sorted_asc = [-9, 1, 2, 11, 45, 56, 78]
-        self.array_sorted_desc = [78, 56, 45, 11, 2, 1, -9]
+        self.test_text1 = "AAA NN MM LL K AA"
+        self.test_pattern1 = "AA"
+        self.benchmark_positions_array1 = [0, 1, 15]
 
-    def test_sort_asc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_example), "asc"), self.array_sorted_asc)
+        self.test_pattern2 = "LLN"
+        self.test_text2 = "BBCLLNMNLLN"
+        self.benchmark_positions_array2 = [3, 8]
 
-    def test_sort_desc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_example), "desc"), self.array_sorted_desc)
+    def test_rabin_karp_search_1(self):
+        pattern_positions = rabin_karp_search(self.test_text1, self.test_pattern1)
+        self.assertEqual(pattern_positions, self.benchmark_positions_array1)
 
-    def test_sort_asc_in_asc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_asc), "asc"), self.array_sorted_asc)
+    def test_rabin_karp_search_2(self):
+        pattern_positions = rabin_karp_search(self.test_text2, self.test_pattern2)
+        self.assertEqual(pattern_positions, self.benchmark_positions_array2)
 
-    def test_sort_asc_in_desc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_asc), "desc"), self.array_sorted_desc)
 
-    def test_sort_desc_in_asc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_desc), "asc"), self.array_sorted_asc)
-
-    def test_sort_desc_in_desc(self):
-        self.assertListEqual(heap_sort(deepcopy(self.array_sorted_desc), "desc"), self.array_sorted_desc)
+if __name__ == '__main__':
+    unittest.main()
